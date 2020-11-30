@@ -1957,6 +1957,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {},
   data: function data() {
@@ -37616,12 +37662,136 @@ var staticRenderFns = [
       _c("div", { staticClass: "row justify-content-center" }, [
         _c("div", { staticClass: "col-md" }, [
           _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Home")]),
+            _c("div", { staticClass: "card-header" }, [
+              _c("h3", [_vm._v("Despesas")])
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
+              _c("div", { staticClass: "form-group col-md-12" }, [
+                _c("h4", [_vm._v("Cadastrar despesa")]),
+                _vm._v(" "),
+                _c("form", { attrs: { action: "" } }, [
+                  _c(
+                    "div",
+                    { staticClass: "d-flex justify-content-md-around" },
+                    [
+                      _c("textarea", {
+                        staticClass: "form-control col-md",
+                        attrs: {
+                          name: "",
+                          id: "",
+                          cols: "10",
+                          rows: "2",
+                          placeholder: "Descreva a despesa"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "form-control col-md",
+                        attrs: { type: "number", placeholder: "Valor" }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "custom-file col-md" }, [
+                        _c("input", {
+                          staticClass: "custom-file-input col-md",
+                          attrs: {
+                            placeholder: "Adicionar imagem",
+                            type: "file",
+                            id: "foto"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "label",
+                          {
+                            staticClass: "custom-file-label",
+                            attrs: { for: "foto" }
+                          },
+                          [_vm._v("Adicionar foto")]
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "my-2" }, [
+                    _c("button", { staticClass: "btn btn-success" }, [
+                      _vm._v("Adicionar")
+                    ]),
+                    _vm._v(" "),
+                    _c("button", { staticClass: "btn btn-warning" }, [
+                      _vm._v("Cancelar")
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c("h4", [_vm._v("Lista de despesas")]),
+                _vm._v(" "),
+                _c("table", { staticClass: "table table-striped" }, [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", [_vm._v("ID")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Nome")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Quantidade")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Preço")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Descrição")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Categoria")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("EDITAR")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("EXCLUIR")])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", { attrs: { "ng-repeat": "product in products" } }, [
+                    _c("td", [_vm._v("%% expense.id %%")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("%% expense.pic %%")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("%% expense.description %%")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("R$ %% expense.value %%")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("%% expense.user %%")]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          attrs: {
+                            "ng-click": "editFieldsProducts(product.id)"
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-edit" }),
+                          _vm._v(" editar")
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: { "ng-click": "delProduct(product)" }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-trash" }),
+                          _vm._v(" excluir")
+                        ]
+                      )
+                    ])
+                  ])
+                ])
+              ])
             ])
           ])
         ])

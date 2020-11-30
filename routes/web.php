@@ -20,3 +20,5 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::resource('despesas', 'ExpenseController')->names('expenses');
