@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illumminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -12,9 +13,15 @@ class ExpenseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        # code...
+        $this->middleware('auth');
+    }
     public function index()
     {
         //
+        $user = Auth::user();
     }
 
     /**
@@ -36,6 +43,12 @@ class ExpenseController extends Controller
     public function store(Request $request)
     {
         //
+        $expense = new Expense();
+        $expense->description = $request->description;
+        $expense->amount = $request->amount;
+        $expense->picture = $request->picture;
+        $expense->user = $request->user;
+        $expense->save();
     }
 
     /**
@@ -47,6 +60,8 @@ class ExpenseController extends Controller
     public function show(Expense $expense)
     {
         //
+        $expense = Expense::all();
+        return ($expense);
     }
 
     /**
@@ -70,6 +85,11 @@ class ExpenseController extends Controller
     public function update(Request $request, Expense $expense)
     {
         //
+        $expense->description = $request->description;
+        $expense->amount = $request->amount;
+        $expense->picture = $request->picture;
+        $expense->user = $request->user;
+        $expense->save();
     }
 
     /**
@@ -81,5 +101,6 @@ class ExpenseController extends Controller
     public function destroy(Expense $expense)
     {
         //
+        $expense->delete();
     }
 }
