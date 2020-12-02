@@ -19,13 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('despesas', 'ExpenseController@show')->name('expense.show');
+// Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::post('despesas', 'ExpenseController@store')->name('expense.store');
+Route::get('despesas', 'App\Http\Controllers\ExpenseController@show')->name('expense.show');
 
-Route::put('despesas/{expense}', 'ExpenseController@update')->name('expense.update');
+Route::post('despesas', 'App\Http\Controllers\ExpenseController@store')->name('expense.store');
 
-Route::delete('despesas/{expense}', 'ExpenseController@destroy')->name('expense.destroy');
+Route::put('despesas/{expense}', 'App\Http\Controllers\ExpenseController@update')->name('expense.update');
+
+Route::delete('despesas/{expense}', 'App\Http\Controllers\ExpenseController@destroy')->name('expense.destroy');
 
