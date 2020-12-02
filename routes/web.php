@@ -21,4 +21,11 @@ Auth::routes();
 
 Route::get('/{any?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('despesas', 'ExpenseController')->names('expenses');
+Route::get('despesas', 'ExpenseController@show')->name('expense.show');
+
+Route::post('despesas', 'ExpenseController@store')->name('expense.store');
+
+Route::put('despesas/{expense}', 'ExpenseController@update')->name('expense.update');
+
+Route::delete('despesas/{expense}', 'ExpenseController@destroy')->name('expense.destroy');
+
