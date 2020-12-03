@@ -8,9 +8,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
+import axios from 'axios';
 
 import Home from './components/HomeComponent'
-import Example from './components/ExampleComponent'
 
 Vue.use(VueRouter)
 /**
@@ -38,11 +38,6 @@ const router = new VueRouter({
             path: '/',
             name: 'home',
             component: Home
-        },
-        {
-            path: '/teste',
-            name: 'teste',
-            component: Example
         }
     ]
 })
