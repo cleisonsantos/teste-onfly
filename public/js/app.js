@@ -1979,6 +1979,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {},
   data: function data() {
@@ -1988,7 +1989,15 @@ __webpack_require__.r(__webpack_exports__);
       expenseDate: "",
       amount: "",
       picture: "",
-      search: ""
+      search: "",
+      edit: {
+        value: "Editar",
+        status: false
+      },
+      add: {
+        value: "Adicionar",
+        status: true
+      }
     };
   },
   methods: {
@@ -2026,7 +2035,29 @@ __webpack_require__.r(__webpack_exports__);
       var newdate = date[2] + '/' + date[1] + '/' + date[0];
       return newdate;
     },
-    editExpense: function editExpense() {},
+    disableBtn: function disableBtn() {
+      this.edit.status === false ? this.edit.status = true : this.edit.status = false;
+      this.add.status === true ? this.add.status = false : this.add.status = true;
+    },
+    editFields: function editFields(id) {
+      var found = this.expenses.find(function (e) {
+        return e.id === id;
+      });
+      console.log(found);
+      this.disableBtn();
+    },
+    editExpense: function editExpense(expense) {
+      axios.put('/despesas/' + expense.id, {
+        description: this.description,
+        expenseDate: this.expenseDate,
+        amount: this.amount,
+        picture: this.picture
+      }).then(function (res) {
+        console.log('editado!');
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     delExpense: function delExpense(expense) {
       var _this2 = this;
 
@@ -37750,7 +37781,39 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(2)
+                  _c("div", { staticClass: "my-2" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.add.status,
+                          expression: "add.status"
+                        }
+                      ],
+                      staticClass: "btn btn-success",
+                      attrs: { type: "submit" },
+                      domProps: { value: _vm.add.value }
+                    }),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.edit.status,
+                          expression: "edit.status"
+                        }
+                      ],
+                      staticClass: "btn btn-info",
+                      attrs: { type: "submit" },
+                      domProps: { value: _vm.edit.value }
+                    }),
+                    _vm._v(" "),
+                    _c("button", { staticClass: "btn btn-warning" }, [
+                      _vm._v("Cancelar")
+                    ])
+                  ])
                 ]
               )
             ]),
@@ -37813,7 +37876,7 @@ var render = function() {
                 "table",
                 { staticClass: "table table-striped " },
                 [
-                  _vm._m(3),
+                  _vm._m(2),
                   _vm._v(" "),
                   _vm._l(_vm.expenses, function(expense) {
                     return _c("tr", { key: expense.index }, [
@@ -37836,7 +37899,7 @@ var render = function() {
                             staticClass: "btn btn-success",
                             on: {
                               click: function($event) {
-                                return _vm.editExpense(expense.id)
+                                return _vm.editFields(expense.id)
                               }
                             }
                           },
@@ -37900,19 +37963,6 @@ var staticRenderFns = [
         { staticClass: "custom-file-label", attrs: { for: "foto" } },
         [_vm._v("Adicionar foto")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "my-2" }, [
-      _c("input", {
-        staticClass: "btn btn-success",
-        attrs: { type: "submit", value: "Adicionar" }
-      }),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-warning" }, [_vm._v("Cancelar")])
     ])
   },
   function() {

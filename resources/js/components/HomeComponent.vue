@@ -21,7 +21,8 @@
                             <!-- <input type="hidden" v-model="userId" value="@php Auth::id(); @endphp"> -->
                             </div>
                             <div class="my-2">
-                            <input type="submit" class="btn btn-success" value="Adicionar">
+                            <input type="submit" class="btn btn-success" v-show="add.status" v-bind:value="add.value">
+                            <input type="submit" class="btn btn-info" v-show="edit.status" v-bind:value="edit.value">
                             <button class="btn btn-warning">Cancelar</button>
                             </div>
                         </form>
@@ -57,7 +58,7 @@
                                 <td>{{ revertDate(expense.expense_date) }}</td>
                                 <td>R$ {{ expense.amount }}</td>
                                 <td>{{ expense.user }}</td>
-                                <td><button class="btn btn-success" v-on:click="editExpense(expense.id)"> <i class="fa fa-edit"></i> editar</button></td>
+                                <td><button class="btn btn-success" v-on:click="editFields(expense.id)"> <i class="fa fa-edit"></i> editar</button></td>
                                 <td><button class="btn btn-danger" v-on:click="delExpense(expense.id)"> <i class="fa fa-trash"></i> excluir</button></td>
                             </tr>
                         </table>
@@ -70,6 +71,7 @@
 </template>
 
 <script>
+
 export default {
     computed: {},
     data() {
@@ -79,7 +81,10 @@ export default {
         expenseDate: "",
         amount: "",
         picture: "",
-        search: ""
+        search: "",
+        edit: { value: "Editar", status: false },
+        add: { value: "Adicionar", status: true }
+
         }
     },
     methods: {
@@ -104,7 +109,7 @@ export default {
                 description: this.description,
                 expenseDate: this.expenseDate,
                 amount: this.amount,
-                picture: this.picture,
+                picture: this.picture
             })
             .then(function(res){
                 console.log('Sucesso!')
@@ -120,8 +125,32 @@ export default {
             let newdate = date[2] + '/' + date[1] + '/' + date[0]
             return newdate
         },
-        editExpense: function(){
+        
+        disableBtn: function(){
+            this.edit.status === false ? this.edit.status = true : this.edit.status = false;
+            this.add.status === true ? this.add.status = false : this.add.status = true;
+        },
 
+        editFields: function(id){
+            let found = this.expenses.find(e => e.id === id);
+
+            console.log(found);
+            this.disableBtn();
+        },
+
+        editExpense: function(expense){
+            axios
+            .put('/despesas/'+ expense.id, { 
+                description: this.description,
+                expenseDate: this.expenseDate,
+                amount: this.amount,
+                picture: this.picture
+             })
+            .then(res => {
+                console.log('editado!')
+            }).catch(error => {
+                console.log(error)
+            })
         },
         delExpense: function(expense){
             axios
