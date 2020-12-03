@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Expense;
 use Illuminate\Http\Request;
-use Illumminate\Support\Facades\Auth;
+use Auth;
 
 class ExpenseController extends Controller
 {
@@ -17,11 +17,11 @@ class ExpenseController extends Controller
     {
         # code...
         $this->middleware('auth');
+        
     }
     public function index()
     {
         //
-        $user = Auth::user();
     }
 
     /**
@@ -44,10 +44,12 @@ class ExpenseController extends Controller
     {
         //
         $expense = new Expense();
+        $user = Auth::id();
+        $expense->user = $user;
         $expense->description = $request->description;
+        $expense->expense_date = $request->expenseDate;
         $expense->amount = $request->amount;
         $expense->picture = $request->picture;
-        $expense->user = $request->user;
         $expense->save();
     }
 
@@ -61,7 +63,7 @@ class ExpenseController extends Controller
     {
         //
         $expense = Expense::all();
-        return ($expense);
+        return response()->json($expense);
     }
 
     /**
@@ -86,9 +88,9 @@ class ExpenseController extends Controller
     {
         //
         $expense->description = $request->description;
+        $expense->expense_date = $request->expenseDate;
         $expense->amount = $request->amount;
         $expense->picture = $request->picture;
-        $expense->user = $request->user;
         $expense->save();
     }
 
