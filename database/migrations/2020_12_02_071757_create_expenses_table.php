@@ -17,6 +17,7 @@ class CreateExpensesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user');
             $table->string('description');
+            $table->date('expense_date');
             $table->float('amount');
             $table->string('picture')->nullable();
             $table->timestamps();
