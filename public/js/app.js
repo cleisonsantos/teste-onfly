@@ -1987,7 +1987,8 @@ __webpack_require__.r(__webpack_exports__);
       description: "",
       expenseDate: "",
       amount: "",
-      picture: ""
+      picture: "",
+      search: ""
     };
   },
   methods: {
@@ -2006,7 +2007,7 @@ __webpack_require__.r(__webpack_exports__);
         return _this.loading = false;
       });
     },
-    save: function save(e) {
+    saveExpenses: function saveExpenses(e) {
       axios.post('/despesas', {
         description: this.description,
         expenseDate: this.expenseDate,
@@ -2038,6 +2039,18 @@ __webpack_require__.r(__webpack_exports__);
         return _this2.loading = false;
       });
       this.loadExpenses();
+    },
+    searchExpense: function searchExpense() {
+      var _this3 = this;
+
+      if (this.search) {
+        var filtered = this.expenses.filter(function (e) {
+          return e.description.toLowerCase().match(_this3.search.toLowerCase());
+        });
+        this.expenses = filtered;
+      } else {
+        this.loadExpenses();
+      }
     }
   },
   mounted: function mounted() {
@@ -37644,92 +37657,102 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "form-group col-md-12" }, [
+            _c("div", {}, [
               _c("h4", [_vm._v("Cadastrar despesa")]),
               _vm._v(" "),
-              _c("form", { attrs: { action: "" }, on: { submit: _vm.save } }, [
-                _c("div", { staticClass: "d-flex justify-content-md-around" }, [
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.description,
-                        expression: "description"
-                      }
-                    ],
-                    staticClass: "form-control col-md",
-                    attrs: {
-                      name: "",
-                      id: "",
-                      cols: "10",
-                      rows: "2",
-                      placeholder: "Descreva a despesa"
-                    },
-                    domProps: { value: _vm.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+              _c(
+                "form",
+                { attrs: { action: "" }, on: { submit: _vm.saveExpenses } },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "d-flex justify-content-md-around" },
+                    [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.description,
+                            expression: "description"
+                          }
+                        ],
+                        staticClass: "form-control col-md",
+                        attrs: {
+                          cols: "10",
+                          rows: "2",
+                          placeholder: "Descreva a despesa"
+                        },
+                        domProps: { value: _vm.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.description = $event.target.value
+                          }
                         }
-                        _vm.description = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.expenseDate,
-                        expression: "expenseDate"
-                      }
-                    ],
-                    staticClass: "form-control col-md",
-                    attrs: { type: "date", placeholder: "Data" },
-                    domProps: { value: _vm.expenseDate },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.expenseDate,
+                            expression: "expenseDate"
+                          }
+                        ],
+                        staticClass: "form-control col-md",
+                        attrs: { type: "date", placeholder: "Data" },
+                        domProps: { value: _vm.expenseDate },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.expenseDate = $event.target.value
+                          }
                         }
-                        _vm.expenseDate = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model.number",
-                        value: _vm.amount,
-                        expression: "amount",
-                        modifiers: { number: true }
-                      }
-                    ],
-                    staticClass: "form-control col-md",
-                    attrs: { type: "number", placeholder: "Valor" },
-                    domProps: { value: _vm.amount },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.number",
+                            value: _vm.amount,
+                            expression: "amount",
+                            modifiers: { number: true }
+                          }
+                        ],
+                        staticClass: "form-control col-md",
+                        attrs: {
+                          type: "number",
+                          step: "0.01",
+                          placeholder: "Valor"
+                        },
+                        domProps: { value: _vm.amount },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.amount = _vm._n($event.target.value)
+                          },
+                          blur: function($event) {
+                            return _vm.$forceUpdate()
+                          }
                         }
-                        _vm.amount = _vm._n($event.target.value)
-                      },
-                      blur: function($event) {
-                        return _vm.$forceUpdate()
-                      }
-                    }
-                  }),
+                      }),
+                      _vm._v(" "),
+                      _vm._m(1)
+                    ]
+                  ),
                   _vm._v(" "),
-                  _vm._m(1)
-                ]),
-                _vm._v(" "),
-                _vm._m(2)
-              ])
+                  _vm._m(2)
+                ]
+              )
             ]),
             _vm._v(
               "\n\n                    " +
@@ -37756,12 +37779,39 @@ var render = function() {
             ),
             _c("br"),
             _vm._v(" "),
-            _c("div", [
+            _c("div", { staticClass: "col-md-12" }, [
               _c("h4", [_vm._v("Lista de despesas")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.search,
+                    expression: "search"
+                  }
+                ],
+                staticClass: "col-md-3 col-sm-12 m-1",
+                attrs: { type: "text", placeholder: "Buscar" },
+                domProps: { value: _vm.search },
+                on: {
+                  input: [
+                    function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.search = $event.target.value
+                    },
+                    function($event) {
+                      return _vm.searchExpense()
+                    }
+                  ]
+                }
+              }),
               _vm._v(" "),
               _c(
                 "table",
-                { staticClass: "table table-striped" },
+                { staticClass: "table table-striped " },
                 [
                   _vm._m(3),
                   _vm._v(" "),
@@ -37779,7 +37829,23 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(expense.user))]),
                       _vm._v(" "),
-                      _vm._m(4, true),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success",
+                            on: {
+                              click: function($event) {
+                                return _vm.editExpense(expense.id)
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "fa fa-edit" }),
+                            _vm._v(" editar")
+                          ]
+                        )
+                      ]),
                       _vm._v(" "),
                       _c("td", [
                         _c(
@@ -37869,21 +37935,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("EXCLUIR")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-success",
-          attrs: { "ng-click": "editExpense(expense.id)" }
-        },
-        [_c("i", { staticClass: "fa fa-edit" }), _vm._v(" editar")]
-      )
     ])
   }
 ]
