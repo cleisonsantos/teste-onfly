@@ -4,15 +4,6 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-
-window.Vue = require('vue');
-import VueRouter from 'vue-router';
-import axios from 'axios';
-
-import Home from './components/HomeComponent'
-
-Vue.use(VueRouter)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -31,6 +22,26 @@ Vue.component('home-component', require('./components/HomeComponent.vue').defaul
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+require('./bootstrap');
+
+window.Vue = require('vue');
+import VueRouter from 'vue-router';
+
+import axios from 'axios';
+
+import money from 'v-money'
+
+
+
+import Home from './components/HomeComponent'
+
+Vue.use(VueRouter)
+
+Vue.use(money)
+
+
+
 const router = new VueRouter({
     mode: 'history',
     routes: [

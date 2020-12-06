@@ -1,18 +1,17 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
+  
       <div class="col-md">
         <div class="card">
           <div class="card-header"><h3>Despesas</h3></div>
 
           <div class="card-body">
-            <div class="">
+            <div class="col-md-12">
               <h4>Cadastrar despesa</h4>
               <form>
-                <div class="d-flex justify-content-md-around">
+                <div class="row">
                   <textarea
                     v-model="description"
-                    class="form-control col-md"
+                    class="form-control col-md-3 my-1"
                     cols="10"
                     rows="2"
                     placeholder="Descreva a despesa"
@@ -20,22 +19,23 @@
                   <input
                     v-model="expenseDate"
                     type="date"
-                    class="form-control col-md"
+                    class="form-control col-md-3 my-1"
                     placeholder="Data"
                   />
                   <input
-                    v-model.number="amount"
-                    class="form-control col-md"
-                    type="number"
-                    step="0.01"
+                    v-model.lazy="amount"
+                    class="form-control col-md-3 my-1"
+                    v-money="money"
                     placeholder="Valor"
                   />
-                  <div class="custom-file col-md">
+                  <div class="custom-file col-md-3 my-1">
                     <input
-                      class="custom-file-input col-md"
+                      class="custom-file-input"
                       placeholder="Adicionar imagem"
                       type="file"
-                      id="foto"
+                      id="picture"
+                      ref="picture"
+                      v-on:change="handlePicture()"
                     />
                     <label class="custom-file-label" for="foto"
                       >Adicionar foto</label
@@ -79,7 +79,7 @@
                 </div>
               </form>
             </div>
-            <div class="col-md-12">
+            <div class="">
               <h4>Lista de despesas</h4>
               <input
                 type="text"
@@ -89,42 +89,44 @@
                 v-model="search"
                 placeholder="Buscar descrição"
               />
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Foto</th>
-                    <th>Descrição</th>
-                    <th>Data</th>
-                    <th>Valor</th>
-                    <th>Usuário</th>
-                    <th>EDITAR</th>
-                    <th>EXCLUIR</th>
+              <div class="overflow-auto">
+                <table class="table table-sm table-striped">
+                  <thead>
+                    <tr>
+                      <th>EDITAR</th>
+                      <th>EXCLUIR</th>
+                      <th>Foto</th>
+                      <th>Descrição</th>
+                      <th>Data</th>
+                      <th>Valor</th>
+                      <th>Usuário</th>
+                    </tr>
+                  </thead>
+                  <tr v-for="expense in expenses" :key="expense.index">
+                    <td>
+                      <button
+                        class="btn btn-info"
+                        v-on:click="editFields(expense.id)"
+                      >
+                        <font-awesome-icon :icon="editIcon" />
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-danger"
+                        v-on:click="delExpense(expense.id)"
+                      >
+                        <font-awesome-icon :icon="deleteIcon" />
+                      </button>
+                    </td>
+                    <td>{{ expense.pic }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td>{{ revertDate(expense.expense_date) }}</td>
+                    <td>R$ {{ expense.amount }}</td>
+                    <td>{{ expense.user }}</td>
                   </tr>
-                </thead>
-                <tr v-for="expense in expenses" :key="expense.index">
-                  <td>{{ expense.pic }}</td>
-                  <td>{{ expense.description }}</td>
-                  <td>{{ revertDate(expense.expense_date) }}</td>
-                  <td>R$ {{ expense.amount }}</td>
-                  <td>{{ expense.user }}</td>
-                  <td>
-                    <button
-                      class="btn btn-success"
-                      v-on:click="editFields(expense.id)"
-                    >
-                      <i class="fa fa-edit"></i> editar
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      class="btn btn-danger"
-                      v-on:click="delExpense(expense.id)"
-                    >
-                      <i class="fa fa-trash"></i> excluir
-                    </button>
-                  </td>
-                </tr>
-              </table>
+                </table>
+              </div>
               <!-- <div
                 v-bind:class="alertSearch.class"
                 class="my-1 text-center"
@@ -137,12 +139,17 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
-    <script>
+<script>
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+
 export default {
+  components: {
+    FontAwesomeIcon,
+  },
   computed: {},
   data() {
     return {
@@ -152,7 +159,7 @@ export default {
       description: "",
       expenseDate: "",
       amount: "",
-      picture: "",
+      picture: [],
       search: "",
       alert: {
         message: "",
@@ -166,6 +173,15 @@ export default {
       },
       edit: { value: "Editar", status: false },
       add: { value: "Adicionar", status: true },
+      money: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "R$ ",
+        precision: 2,
+        masked: true /* doesn't work with directive */,
+      },
+      editIcon: faEdit,
+      deleteIcon: faTrash,
     };
   },
   methods: {
@@ -230,6 +246,15 @@ export default {
       this.alertSearch.message = null;
       this.alertSearch.status = false;
       this.alertSearch.class = null;
+    },
+
+    //FUNÇÃO PARA A IMAGEM
+    handlePicture: function(){
+        
+        let uploadedPicture = this.$refs.picture.files
+        
+        this.picture.push(uploadedPicture[0])
+        console.log(this.picture)
     },
 
     //FUNÇÕES LISTAR, SALVAR, EDITAR E DELETAR FRONT-END PARA O BACK-END
