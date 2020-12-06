@@ -64,7 +64,6 @@
                     class="btn btn-info"
                     v-on:click="editExpense"
                     v-show="edit.status"
-                    v-bind:value="edit.value"
                     v-bind:disabled="!description || !expenseDate || !amount"
                   >
                     Editar
@@ -80,15 +79,6 @@
                 </div>
               </form>
             </div>
-
-            {{ description }}
-            <br />
-            {{ expenseDate }}
-            <br />
-            {{ amount }}
-            <br />
-            {{ picture }}
-            <br />
             <div class="col-md-12">
               <h4>Lista de despesas</h4>
               <input
@@ -158,6 +148,7 @@ export default {
     return {
       unfilteredExpenses: [],
       expenses: [],
+      id: "",
       description: "",
       expenseDate: "",
       amount: "",
@@ -195,8 +186,12 @@ export default {
 
     editFields: function (id) {
       let found = this.expenses.find((e) => e.id === id);
-
       console.log(found);
+      this.id = found.id;
+      this.description = found.description;
+      this.expenseDate = found.expense_date;
+      this.amount = found.amount;
+      this.picture = found.picture;
       this.disableBtn();
     },
 
@@ -219,7 +214,7 @@ export default {
         );
         this.expenses = filtered;
       } else {
-        this.expenses = this.unfilteredExpenses
+        this.expenses = this.unfilteredExpenses;
       }
     },
     alertSomething: function (m, className) {
@@ -243,7 +238,7 @@ export default {
         .get("/despesas")
         .then((res) => {
           this.expenses = res.data;
-          this.unfilteredExpenses = res.data
+          this.unfilteredExpenses = res.data;
         })
         .catch((error) => {
           console.error();
@@ -252,6 +247,7 @@ export default {
         .finally(() => (this.loading = false));
     },
     saveExpense: function (e) {
+      e.preventDefault();
       axios
         .post("/despesas", {
           description: this.description,
@@ -260,44 +256,52 @@ export default {
           picture: this.picture,
         })
         .then((res) => {
-          this.alertSomething("Despesa adicionada com sucesso!","alert alert-success");
+          this.alertSomething(
+            "Despesa adicionada com sucesso!",
+            "alert alert-success"
+          );
         })
-        .catch((error) => { 
-          console.log(error)
+        .catch((error) => {
           this.alertSomething(error, "alert alert-danger");
         });
-      e.preventDefault();
       
+
       this.loadExpenses();
       this.clearFields();
       setTimeout(this.alertReset, 5000);
     },
 
-    editExpense: function (expense) {
+    editExpense: function (e) {
+      e.preventDefault();
+      let url = "/despesas/" + this.id
+      console.log(url)
       axios
-        .put("/despesas/" + expense.id, {
+        .put(url, {
           description: this.description,
           expenseDate: this.expenseDate,
           amount: this.amount,
           picture: this.picture,
         })
         .then((res) => {
-          console.log("editado!");
+          this.alertSomething(
+            "Despesa editada com sucesso!",
+            "alert alert-success"
+          );
         })
         .catch((error) => {
           console.log(error);
+          this.alertSomething(error, "alert alert-danger");
         });
-
-      this.alertSomething(
-        "Despesa editada com sucesso!",
-        "alert alert-success"
-      );
+      
+      this.loadExpenses();
+      this.clearFields();
+      setTimeout(this.alertReset, 5000);
     },
     delExpense: function (expense) {
       axios
         .delete("/despesas/" + expense)
         .then((res) => {
-          console.log(res.data)
+          console.log(res.data);
         })
         .catch((error) => {
           console.error();

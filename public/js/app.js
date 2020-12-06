@@ -2051,22 +2051,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {},
   data: function data() {
     return {
       unfilteredExpenses: [],
       expenses: [],
+      id: "",
       description: "",
       expenseDate: "",
       amount: "",
@@ -2107,6 +2098,11 @@ __webpack_require__.r(__webpack_exports__);
         return e.id === id;
       });
       console.log(found);
+      this.id = found.id;
+      this.description = found.description;
+      this.expenseDate = found.expense_date;
+      this.amount = found.amount;
+      this.picture = found.picture;
       this.disableBtn();
     },
     clearFields: function clearFields() {
@@ -2164,6 +2160,7 @@ __webpack_require__.r(__webpack_exports__);
     saveExpense: function saveExpense(e) {
       var _this3 = this;
 
+      e.preventDefault();
       axios.post("/despesas", {
         description: this.description,
         expenseDate: this.expenseDate,
@@ -2172,38 +2169,44 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         _this3.alertSomething("Despesa adicionada com sucesso!", "alert alert-success");
       })["catch"](function (error) {
-        console.log(error);
-
         _this3.alertSomething(error, "alert alert-danger");
       });
-      e.preventDefault();
       this.loadExpenses();
       this.clearFields();
       setTimeout(this.alertReset, 5000);
     },
-    editExpense: function editExpense(expense) {
-      axios.put("/despesas/" + expense.id, {
+    editExpense: function editExpense(e) {
+      var _this4 = this;
+
+      e.preventDefault();
+      var url = "/despesas/" + this.id;
+      console.log(url);
+      axios.put(url, {
         description: this.description,
         expenseDate: this.expenseDate,
         amount: this.amount,
         picture: this.picture
       }).then(function (res) {
-        console.log("editado!");
+        _this4.alertSomething("Despesa editada com sucesso!", "alert alert-success");
       })["catch"](function (error) {
         console.log(error);
+
+        _this4.alertSomething(error, "alert alert-danger");
       });
-      this.alertSomething("Despesa editada com sucesso!", "alert alert-success");
+      this.loadExpenses();
+      this.clearFields();
+      setTimeout(this.alertReset, 5000);
     },
     delExpense: function delExpense(expense) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios["delete"]("/despesas/" + expense).then(function (res) {
         console.log(res.data);
       })["catch"](function (error) {
         console.error();
-        _this4.errored = true;
+        _this5.errored = true;
       })["finally"](function () {
-        return _this4.loading = false;
+        return _this5.loading = false;
       });
       this.loadExpenses();
     }
@@ -37957,7 +37960,6 @@ var render = function() {
                       ],
                       staticClass: "btn btn-info",
                       attrs: {
-                        value: _vm.edit.value,
                         disabled:
                           !_vm.description || !_vm.expenseDate || !_vm.amount
                       },
@@ -37978,14 +37980,6 @@ var render = function() {
                 ])
               ])
             ]),
-            _vm._v("\n\n          " + _vm._s(_vm.description) + "\n          "),
-            _c("br"),
-            _vm._v("\n          " + _vm._s(_vm.expenseDate) + "\n          "),
-            _c("br"),
-            _vm._v("\n          " + _vm._s(_vm.amount) + "\n          "),
-            _c("br"),
-            _vm._v("\n          " + _vm._s(_vm.picture) + "\n          "),
-            _c("br"),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-12" }, [
               _c("h4", [_vm._v("Lista de despesas")]),
