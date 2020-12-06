@@ -12156,7 +12156,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -12270,7 +12269,6 @@ __webpack_require__.r(__webpack_exports__);
     handlePicture: function handlePicture() {
       var uploadedPicture = this.$refs.picture.files;
       this.picture.push(uploadedPicture[0]);
-      console.log(this.picture);
     },
     //FUNÇÕES LISTAR, SALVAR, EDITAR E DELETAR FRONT-END PARA O BACK-END
     loadExpenses: function loadExpenses() {
@@ -12279,6 +12277,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/despesas").then(function (res) {
         _this2.expenses = res.data;
         _this2.unfilteredExpenses = res.data;
+        console.log(_this2.expenses);
       })["catch"](function (error) {
         console.error();
         _this2.errored = true;
@@ -12290,19 +12289,25 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       e.preventDefault();
-      axios.post("/despesas", {
-        description: this.description,
-        expenseDate: this.expenseDate,
-        amount: this.amount,
-        picture: this.picture
+      var formData = new FormData();
+      formData.append("description", this.description);
+      formData.append("expenseDate", this.expenseDate);
+      formData.append("amount", parseInt(this.amount.replace('R$ ', '')));
+      formData.append("picture", this.picture[0]); //console.log(formData)
+
+      axios.post("/despesas", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
       }).then(function (res) {
         _this3.alertSomething("Despesa adicionada com sucesso!", "alert alert-success");
+
+        console.log(res.data);
       })["catch"](function (error) {
         _this3.alertSomething(error, "alert alert-danger");
       });
       this.loadExpenses();
       this.clearFields();
-      this.disableBtn();
       setTimeout(this.alertReset, 5000);
     },
     editExpense: function editExpense(e) {
@@ -12325,6 +12330,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.loadExpenses();
       this.clearFields();
+      this.disableBtn();
       setTimeout(this.alertReset, 5000);
     },
     delExpense: function delExpense(expense) {
@@ -48227,7 +48233,15 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(expense.pic))]),
+                    _c("td", [
+                      _c("img", {
+                        staticStyle: { height: "2.5rem" },
+                        attrs: {
+                          src: "/storage/" + expense.picture,
+                          alt: "Foto da despesa"
+                        }
+                      })
+                    ]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(expense.description))]),
                     _vm._v(" "),
