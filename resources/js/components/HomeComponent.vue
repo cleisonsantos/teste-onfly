@@ -264,17 +264,17 @@ export default {
         .catch((error) => {
           this.alertSomething(error, "alert alert-danger");
         });
-      
 
       this.loadExpenses();
       this.clearFields();
+      this.disableBtn();
       setTimeout(this.alertReset, 5000);
     },
 
     editExpense: function (e) {
       e.preventDefault();
-      let url = "/despesas/" + this.id
-      console.log(url)
+      let url = "/despesas/" + this.id;
+      console.log(url);
       axios
         .put(url, {
           description: this.description,
@@ -292,7 +292,7 @@ export default {
           console.log(error);
           this.alertSomething(error, "alert alert-danger");
         });
-      
+
       this.loadExpenses();
       this.clearFields();
       setTimeout(this.alertReset, 5000);

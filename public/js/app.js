@@ -2173,6 +2173,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.loadExpenses();
       this.clearFields();
+      this.disableBtn();
       setTimeout(this.alertReset, 5000);
     },
     editExpense: function editExpense(e) {
