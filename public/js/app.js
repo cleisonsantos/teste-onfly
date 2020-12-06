@@ -1980,16 +1980,108 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {},
   data: function data() {
     return {
+      unfilteredExpenses: [],
       expenses: [],
       description: "",
       expenseDate: "",
       amount: "",
       picture: "",
       search: "",
+      alert: {
+        message: "",
+        status: false,
+        "class": ""
+      },
+      alertSearch: {
+        message: "",
+        status: false,
+        "class": ""
+      },
       edit: {
         value: "Editar",
         status: false
@@ -2001,38 +2093,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    /* addExpense: function (){
-        this.expense = this.expense.push(description.amount, amount.amount, picture.amount)
-    } */
-    loadExpenses: function loadExpenses() {
-      var _this = this;
-
-      axios.get('/despesas').then(function (res) {
-        _this.expenses = res.data;
-      })["catch"](function (error) {
-        console.error();
-        _this.errored = true;
-      })["finally"](function () {
-        return _this.loading = false;
-      });
-    },
-    saveExpenses: function saveExpenses(e) {
-      axios.post('/despesas', {
-        description: this.description,
-        expenseDate: this.expenseDate,
-        amount: this.amount,
-        picture: this.picture
-      }).then(function (res) {
-        console.log('Sucesso!');
-      })["catch"](function (error) {
-        console.log(error);
-      });
-      e.preventDefault();
-      this.loadExpenses();
-    },
     revertDate: function revertDate(date) {
-      date = date.split('-');
-      var newdate = date[2] + '/' + date[1] + '/' + date[0];
+      date = date.split("-");
+      var newdate = date[2] + "/" + date[1] + "/" + date[0];
       return newdate;
     },
     disableBtn: function disableBtn() {
@@ -2046,42 +2109,103 @@ __webpack_require__.r(__webpack_exports__);
       console.log(found);
       this.disableBtn();
     },
-    editExpense: function editExpense(expense) {
-      axios.put('/despesas/' + expense.id, {
-        description: this.description,
-        expenseDate: this.expenseDate,
-        amount: this.amount,
-        picture: this.picture
-      }).then(function (res) {
-        console.log('editado!');
-      })["catch"](function (error) {
-        console.log(error);
-      });
+    clearFields: function clearFields() {
+      this.description = null;
+      this.expenseDate = null;
+      this.amount = null;
+      this.picture = null;
     },
-    delExpense: function delExpense(expense) {
+    alertSearchResult: function alertSearchResult(m, className) {
+      this.alertSearch.message = m;
+      this.alertSearch.status = true;
+      this.alertSearch["class"] = className;
+      console.log(this.alert.message);
+    },
+    searchExpense: function searchExpense() {
+      var _this = this;
+
+      if (this.search) {
+        var filtered = this.expenses.filter(function (e) {
+          return e.description.toLowerCase().match(_this.search.toLowerCase());
+        });
+        this.expenses = filtered;
+      } else {
+        this.expenses = this.unfilteredExpenses;
+      }
+    },
+    alertSomething: function alertSomething(m, className) {
+      this.alert.message = m;
+      this.alert.status = true;
+      this.alert["class"] = className;
+      console.log(this.alert.message);
+    },
+    alertReset: function alertReset() {
+      this.alert.message = null;
+      this.alert.status = false;
+      this.alert["class"] = null;
+      this.alertSearch.message = null;
+      this.alertSearch.status = false;
+      this.alertSearch["class"] = null;
+    },
+    //FUNÇÕES LISTAR, SALVAR, EDITAR E DELETAR FRONT-END PARA O BACK-END
+    loadExpenses: function loadExpenses() {
       var _this2 = this;
 
-      axios["delete"]('/despesas/' + expense).then(function (res) {
-        console.log('Deletado!');
+      axios.get("/despesas").then(function (res) {
+        _this2.expenses = res.data;
+        _this2.unfilteredExpenses = res.data;
       })["catch"](function (error) {
         console.error();
         _this2.errored = true;
       })["finally"](function () {
         return _this2.loading = false;
       });
-      this.loadExpenses();
     },
-    searchExpense: function searchExpense() {
+    saveExpense: function saveExpense(e) {
       var _this3 = this;
 
-      if (this.search) {
-        var filtered = this.expenses.filter(function (e) {
-          return e.description.toLowerCase().match(_this3.search.toLowerCase());
-        });
-        this.expenses = filtered;
-      } else {
-        this.loadExpenses();
-      }
+      axios.post("/despesas", {
+        description: this.description,
+        expenseDate: this.expenseDate,
+        amount: this.amount,
+        picture: this.picture
+      }).then(function (res) {
+        _this3.alertSomething("Despesa adicionada com sucesso!", "alert alert-success");
+      })["catch"](function (error) {
+        console.log(error);
+
+        _this3.alertSomething(error, "alert alert-danger");
+      });
+      e.preventDefault();
+      this.loadExpenses();
+      this.clearFields();
+      setTimeout(this.alertReset, 5000);
+    },
+    editExpense: function editExpense(expense) {
+      axios.put("/despesas/" + expense.id, {
+        description: this.description,
+        expenseDate: this.expenseDate,
+        amount: this.amount,
+        picture: this.picture
+      }).then(function (res) {
+        console.log("editado!");
+      })["catch"](function (error) {
+        console.log(error);
+      });
+      this.alertSomething("Despesa editada com sucesso!", "alert alert-success");
+    },
+    delExpense: function delExpense(expense) {
+      var _this4 = this;
+
+      axios["delete"]("/despesas/" + expense).then(function (res) {
+        console.log(res.data);
+      })["catch"](function (error) {
+        console.error();
+        _this4.errored = true;
+      })["finally"](function () {
+        return _this4.loading = false;
+      });
+      this.loadExpenses();
     }
   },
   mounted: function mounted() {
@@ -37691,98 +37815,117 @@ var render = function() {
             _c("div", {}, [
               _c("h4", [_vm._v("Cadastrar despesa")]),
               _vm._v(" "),
-              _c(
-                "form",
-                { attrs: { action: "" }, on: { submit: _vm.saveExpenses } },
-                [
-                  _c(
-                    "div",
-                    { staticClass: "d-flex justify-content-md-around" },
-                    [
-                      _c("textarea", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.description,
-                            expression: "description"
-                          }
-                        ],
-                        staticClass: "form-control col-md",
-                        attrs: {
-                          cols: "10",
-                          rows: "2",
-                          placeholder: "Descreva a despesa"
-                        },
-                        domProps: { value: _vm.description },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.description = $event.target.value
-                          }
+              _c("form", [
+                _c("div", { staticClass: "d-flex justify-content-md-around" }, [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.description,
+                        expression: "description"
+                      }
+                    ],
+                    staticClass: "form-control col-md",
+                    attrs: {
+                      cols: "10",
+                      rows: "2",
+                      placeholder: "Descreva a despesa"
+                    },
+                    domProps: { value: _vm.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
                         }
-                      }),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.expenseDate,
-                            expression: "expenseDate"
-                          }
-                        ],
-                        staticClass: "form-control col-md",
-                        attrs: { type: "date", placeholder: "Data" },
-                        domProps: { value: _vm.expenseDate },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.expenseDate = $event.target.value
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model.number",
-                            value: _vm.amount,
-                            expression: "amount",
-                            modifiers: { number: true }
-                          }
-                        ],
-                        staticClass: "form-control col-md",
-                        attrs: {
-                          type: "number",
-                          step: "0.01",
-                          placeholder: "Valor"
-                        },
-                        domProps: { value: _vm.amount },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.amount = _vm._n($event.target.value)
-                          },
-                          blur: function($event) {
-                            return _vm.$forceUpdate()
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm._m(1)
-                    ]
-                  ),
+                        _vm.description = $event.target.value
+                      }
+                    }
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "my-2" }, [
-                    _c("input", {
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.expenseDate,
+                        expression: "expenseDate"
+                      }
+                    ],
+                    staticClass: "form-control col-md",
+                    attrs: { type: "date", placeholder: "Data" },
+                    domProps: { value: _vm.expenseDate },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.expenseDate = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.number",
+                        value: _vm.amount,
+                        expression: "amount",
+                        modifiers: { number: true }
+                      }
+                    ],
+                    staticClass: "form-control col-md",
+                    attrs: {
+                      type: "number",
+                      step: "0.01",
+                      placeholder: "Valor"
+                    },
+                    domProps: { value: _vm.amount },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.amount = _vm._n($event.target.value)
+                      },
+                      blur: function($event) {
+                        return _vm.$forceUpdate()
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(1)
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.alert.status,
+                        expression: "alert.status"
+                      }
+                    ],
+                    staticClass: "col-md-4 my-1",
+                    class: _vm.alert.class,
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.alert.message) +
+                        "\n              "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "my-2" }, [
+                  _c(
+                    "button",
+                    {
                       directives: [
                         {
                           name: "show",
@@ -37792,11 +37935,18 @@ var render = function() {
                         }
                       ],
                       staticClass: "btn btn-success",
-                      attrs: { type: "submit" },
-                      domProps: { value: _vm.add.value }
-                    }),
-                    _vm._v(" "),
-                    _c("input", {
+                      attrs: {
+                        disabled:
+                          !_vm.description || !_vm.expenseDate || !_vm.amount
+                      },
+                      on: { click: _vm.saveExpense }
+                    },
+                    [_vm._v("\n                  Adicionar\n                ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
                       directives: [
                         {
                           name: "show",
@@ -37806,40 +37956,35 @@ var render = function() {
                         }
                       ],
                       staticClass: "btn btn-info",
-                      attrs: { type: "submit" },
-                      domProps: { value: _vm.edit.value }
-                    }),
-                    _vm._v(" "),
-                    _c("button", { staticClass: "btn btn-warning" }, [
-                      _vm._v("Cancelar")
-                    ])
-                  ])
-                ]
-              )
+                      attrs: {
+                        value: _vm.edit.value,
+                        disabled:
+                          !_vm.description || !_vm.expenseDate || !_vm.amount
+                      },
+                      on: { click: _vm.editExpense }
+                    },
+                    [_vm._v("\n                  Editar\n                ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-warning",
+                      attrs: { type: "reset", value: "Limpar" },
+                      on: { click: _vm.clearFields }
+                    },
+                    [_vm._v("\n                  Limpar\n                ")]
+                  )
+                ])
+              ])
             ]),
-            _vm._v(
-              "\n\n                    " +
-                _vm._s(_vm.description) +
-                "\n                    "
-            ),
+            _vm._v("\n\n          " + _vm._s(_vm.description) + "\n          "),
             _c("br"),
-            _vm._v(
-              "\n                    " +
-                _vm._s(_vm.expenseDate) +
-                "\n                    "
-            ),
+            _vm._v("\n          " + _vm._s(_vm.expenseDate) + "\n          "),
             _c("br"),
-            _vm._v(
-              "\n                    " +
-                _vm._s(_vm.amount) +
-                "\n                    "
-            ),
+            _vm._v("\n          " + _vm._s(_vm.amount) + "\n          "),
             _c("br"),
-            _vm._v(
-              "\n                    " +
-                _vm._s(_vm.picture) +
-                "\n                    "
-            ),
+            _vm._v("\n          " + _vm._s(_vm.picture) + "\n          "),
             _c("br"),
             _vm._v(" "),
             _c("div", { staticClass: "col-md-12" }, [
@@ -37855,26 +38000,39 @@ var render = function() {
                   }
                 ],
                 staticClass: "col-md-3 col-sm-12 m-1",
-                attrs: { type: "text", placeholder: "Buscar" },
+                attrs: { type: "text", placeholder: "Buscar descrição" },
                 domProps: { value: _vm.search },
                 on: {
-                  input: [
-                    function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.search = $event.target.value
-                    },
+                  keyup: [
                     function($event) {
                       return _vm.searchExpense()
+                    },
+                    function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "delete", [8, 46], $event.key, [
+                          "Backspace",
+                          "Delete",
+                          "Del"
+                        ])
+                      ) {
+                        return null
+                      }
+                      return _vm.searchExpense()
                     }
-                  ]
+                  ],
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.search = $event.target.value
+                  }
                 }
               }),
               _vm._v(" "),
               _c(
                 "table",
-                { staticClass: "table table-striped " },
+                { staticClass: "table table-striped" },
                 [
                   _vm._m(2),
                   _vm._v(" "),
@@ -37905,7 +38063,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fa fa-edit" }),
-                            _vm._v(" editar")
+                            _vm._v(" editar\n                  ")
                           ]
                         )
                       ]),
@@ -37923,7 +38081,7 @@ var render = function() {
                           },
                           [
                             _c("i", { staticClass: "fa fa-trash" }),
-                            _vm._v(" excluir")
+                            _vm._v(" excluir\n                  ")
                           ]
                         )
                       ])
