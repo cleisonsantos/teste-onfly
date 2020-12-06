@@ -22,6 +22,8 @@ class ExpenseController extends Controller
     public function index()
     {
         //
+        $expense = Expense::all();
+        return response()->json($expense);
     }
 
     /**
@@ -51,6 +53,7 @@ class ExpenseController extends Controller
         $expense->amount = $request->amount;
         $expense->picture = $request->picture;
         $expense->save();
+        return 'Despesa salva!';
     }
 
     /**
@@ -62,8 +65,7 @@ class ExpenseController extends Controller
     public function show(Expense $expense)
     {
         //
-        $expense = Expense::all();
-        return response()->json($expense);
+        
     }
 
     /**
@@ -92,6 +94,7 @@ class ExpenseController extends Controller
         $expense->amount = $request->amount;
         $expense->picture = $request->picture;
         $expense->save();
+        return 'Despesa editada!';
     }
 
     /**
@@ -104,5 +107,7 @@ class ExpenseController extends Controller
     {
         //
         $expense->delete();
+        return 'Deletado!';
+        
     }
 }
