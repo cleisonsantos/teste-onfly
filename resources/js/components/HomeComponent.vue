@@ -1,5 +1,6 @@
 <template>
-  <div class="col-md">
+<div class="d-flex justify-content-center">
+  <div class="col-xl-6 col-md-12 col-sm-12">
     <div class="card">
       <div class="card-header"><h3>Despesas</h3></div>
 
@@ -89,7 +90,7 @@
             placeholder="Buscar descrição"
           />
           <div class="overflow-auto">
-            <table class="table table-sm table-striped">
+            <table class="table table-striped">
               <thead>
                 <tr>
                   <th>EDITAR</th>
@@ -138,6 +139,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -147,7 +149,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   components: {
-    FontAwesomeIcon,
+    FontAwesomeIcon
   },
   computed: {},
   data() {
@@ -201,7 +203,6 @@ export default {
 
     editFields: function (id) {
       let found = this.expenses.find((e) => e.id === id);
-      console.log(found);
       this.id = found.id;
       this.description = found.description;
       this.expenseDate = found.expense_date;
@@ -220,7 +221,6 @@ export default {
       this.alertSearch.message = m;
       this.alertSearch.status = true;
       this.alertSearch.class = className;
-      console.log(this.alert.message);
     },
     searchExpense: function () {
       if (this.search) {
@@ -236,7 +236,6 @@ export default {
       this.alert.message = m;
       this.alert.status = true;
       this.alert.class = className;
-      console.log(this.alert.message);
     },
     alertReset: function () {
       this.alert.message = null;
@@ -261,7 +260,6 @@ export default {
         .then((res) => {
           this.expenses = res.data;
           this.unfilteredExpenses = res.data;
-          console.log(this.expenses)
         })
         .catch((error) => {
           console.error();
@@ -302,12 +300,12 @@ export default {
     editExpense: function (e) {
       e.preventDefault();
       let url = "/despesas/" + this.id;
-      console.log(url);
+      
       axios
         .put(url, {
           description: this.description,
           expenseDate: this.expenseDate,
-          amount: this.amount,
+          amount: parseFloat(this.amount.replace('R$ ', '').replace(",", ".")),
           picture: this.picture,
         })
         .then((res) => {

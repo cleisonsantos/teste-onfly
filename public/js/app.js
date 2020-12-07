@@ -12156,6 +12156,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -12219,7 +12221,6 @@ __webpack_require__.r(__webpack_exports__);
       var found = this.expenses.find(function (e) {
         return e.id === id;
       });
-      console.log(found);
       this.id = found.id;
       this.description = found.description;
       this.expenseDate = found.expense_date;
@@ -12237,7 +12238,6 @@ __webpack_require__.r(__webpack_exports__);
       this.alertSearch.message = m;
       this.alertSearch.status = true;
       this.alertSearch["class"] = className;
-      console.log(this.alert.message);
     },
     searchExpense: function searchExpense() {
       var _this = this;
@@ -12255,7 +12255,6 @@ __webpack_require__.r(__webpack_exports__);
       this.alert.message = m;
       this.alert.status = true;
       this.alert["class"] = className;
-      console.log(this.alert.message);
     },
     alertReset: function alertReset() {
       this.alert.message = null;
@@ -12277,7 +12276,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/despesas").then(function (res) {
         _this2.expenses = res.data;
         _this2.unfilteredExpenses = res.data;
-        console.log(_this2.expenses);
       })["catch"](function (error) {
         console.error();
         _this2.errored = true;
@@ -12315,11 +12313,10 @@ __webpack_require__.r(__webpack_exports__);
 
       e.preventDefault();
       var url = "/despesas/" + this.id;
-      console.log(url);
       axios.put(url, {
         description: this.description,
         expenseDate: this.expenseDate,
-        amount: this.amount,
+        amount: parseFloat(this.amount.replace('R$ ', '').replace(",", ".")),
         picture: this.picture
       }).then(function (res) {
         _this4.alertSomething("Despesa editada com sucesso!", "alert alert-success");
@@ -47955,308 +47952,315 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md" }, [
-    _c("div", { staticClass: "card" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "col-md-12" }, [
-          _c("h4", [_vm._v("Cadastrar despesa")]),
-          _vm._v(" "),
-          _c("form", [
-            _c("div", { staticClass: "row" }, [
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.description,
-                    expression: "description"
-                  }
-                ],
-                staticClass: "form-control col-md-3 my-1",
-                attrs: {
-                  cols: "10",
-                  rows: "2",
-                  placeholder: "Descreva a despesa"
-                },
-                domProps: { value: _vm.description },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+  return _c("div", { staticClass: "d-flex justify-content-center" }, [
+    _c("div", { staticClass: "col-xl-6 col-md-12 col-sm-12" }, [
+      _c("div", { staticClass: "card" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "col-md-12" }, [
+            _c("h4", [_vm._v("Cadastrar despesa")]),
+            _vm._v(" "),
+            _c("form", [
+              _c("div", { staticClass: "row" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.description,
+                      expression: "description"
                     }
-                    _vm.description = $event.target.value
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.expenseDate,
-                    expression: "expenseDate"
-                  }
-                ],
-                staticClass: "form-control col-md-3 my-1",
-                attrs: { type: "date", placeholder: "Data" },
-                domProps: { value: _vm.expenseDate },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.expenseDate = $event.target.value
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model.lazy",
-                    value: _vm.amount,
-                    expression: "amount",
-                    modifiers: { lazy: true }
-                  },
-                  {
-                    name: "money",
-                    rawName: "v-money",
-                    value: _vm.money,
-                    expression: "money"
-                  }
-                ],
-                staticClass: "form-control col-md-3 my-1",
-                attrs: { placeholder: "Valor" },
-                domProps: { value: _vm.amount },
-                on: {
-                  change: function($event) {
-                    _vm.amount = $event.target.value
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "custom-file col-md-3 my-1" }, [
-                _c("input", {
-                  ref: "picture",
-                  staticClass: "custom-file-input",
+                  ],
+                  staticClass: "form-control col-md-3 my-1",
                   attrs: {
-                    placeholder: "Adicionar imagem",
-                    type: "file",
-                    id: "picture"
+                    cols: "10",
+                    rows: "2",
+                    placeholder: "Descreva a despesa"
                   },
+                  domProps: { value: _vm.description },
                   on: {
-                    change: function($event) {
-                      return _vm.handlePicture()
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.description = $event.target.value
                     }
                   }
                 }),
                 _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.expenseDate,
+                      expression: "expenseDate"
+                    }
+                  ],
+                  staticClass: "form-control col-md-3 my-1",
+                  attrs: { type: "date", placeholder: "Data" },
+                  domProps: { value: _vm.expenseDate },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.expenseDate = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.lazy",
+                      value: _vm.amount,
+                      expression: "amount",
+                      modifiers: { lazy: true }
+                    },
+                    {
+                      name: "money",
+                      rawName: "v-money",
+                      value: _vm.money,
+                      expression: "money"
+                    }
+                  ],
+                  staticClass: "form-control col-md-3 my-1",
+                  attrs: { placeholder: "Valor" },
+                  domProps: { value: _vm.amount },
+                  on: {
+                    change: function($event) {
+                      _vm.amount = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "custom-file col-md-3 my-1" }, [
+                  _c("input", {
+                    ref: "picture",
+                    staticClass: "custom-file-input",
+                    attrs: {
+                      placeholder: "Adicionar imagem",
+                      type: "file",
+                      id: "picture"
+                    },
+                    on: {
+                      change: function($event) {
+                        return _vm.handlePicture()
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "custom-file-label",
+                      attrs: { for: "foto" }
+                    },
+                    [_vm._v("Adicionar foto")]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.alert.status,
+                      expression: "alert.status"
+                    }
+                  ],
+                  staticClass: "col-md-4 my-1",
+                  class: _vm.alert.class,
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n              " +
+                      _vm._s(_vm.alert.message) +
+                      "\n            "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "my-2" }, [
                 _c(
-                  "label",
-                  { staticClass: "custom-file-label", attrs: { for: "foto" } },
-                  [_vm._v("Adicionar foto")]
+                  "button",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.add.status,
+                        expression: "add.status"
+                      }
+                    ],
+                    staticClass: "btn btn-success",
+                    attrs: {
+                      disabled:
+                        !_vm.description || !_vm.expenseDate || !_vm.amount
+                    },
+                    on: { click: _vm.saveExpense }
+                  },
+                  [_vm._v("\n                Adicionar\n              ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.edit.status,
+                        expression: "edit.status"
+                      }
+                    ],
+                    staticClass: "btn btn-info",
+                    attrs: {
+                      disabled:
+                        !_vm.description || !_vm.expenseDate || !_vm.amount
+                    },
+                    on: { click: _vm.editExpense }
+                  },
+                  [_vm._v("\n                Editar\n              ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-warning",
+                    attrs: { type: "reset", value: "Limpar" },
+                    on: { click: _vm.clearFields }
+                  },
+                  [_vm._v("\n                Limpar\n              ")]
                 )
               ])
-            ]),
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", {}, [
+            _c("h4", [_vm._v("Lista de despesas")]),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.alert.status,
-                    expression: "alert.status"
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.search,
+                  expression: "search"
+                }
+              ],
+              staticClass: "col-md-3 col-sm-12 m-1",
+              attrs: { type: "text", placeholder: "Buscar descrição" },
+              domProps: { value: _vm.search },
+              on: {
+                keyup: [
+                  function($event) {
+                    return _vm.searchExpense()
+                  },
+                  function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "delete", [8, 46], $event.key, [
+                        "Backspace",
+                        "Delete",
+                        "Del"
+                      ])
+                    ) {
+                      return null
+                    }
+                    return _vm.searchExpense()
                   }
                 ],
-                staticClass: "col-md-4 my-1",
-                class: _vm.alert.class,
-                attrs: { role: "alert" }
-              },
-              [
-                _vm._v(
-                  "\n            " + _vm._s(_vm.alert.message) + "\n          "
-                )
-              ]
-            ),
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.search = $event.target.value
+                }
+              }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "my-2" }, [
+            _c("div", { staticClass: "overflow-auto" }, [
               _c(
-                "button",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.add.status,
-                      expression: "add.status"
-                    }
-                  ],
-                  staticClass: "btn btn-success",
-                  attrs: {
-                    disabled:
-                      !_vm.description || !_vm.expenseDate || !_vm.amount
-                  },
-                  on: { click: _vm.saveExpense }
-                },
-                [_vm._v("\n              Adicionar\n            ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.edit.status,
-                      expression: "edit.status"
-                    }
-                  ],
-                  staticClass: "btn btn-info",
-                  attrs: {
-                    disabled:
-                      !_vm.description || !_vm.expenseDate || !_vm.amount
-                  },
-                  on: { click: _vm.editExpense }
-                },
-                [_vm._v("\n              Editar\n            ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-warning",
-                  attrs: { type: "reset", value: "Limpar" },
-                  on: { click: _vm.clearFields }
-                },
-                [_vm._v("\n              Limpar\n            ")]
+                "table",
+                { staticClass: "table table-striped" },
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _vm._l(_vm.expenses, function(expense) {
+                    return _c("tr", { key: expense.index }, [
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-info",
+                            on: {
+                              click: function($event) {
+                                return _vm.editFields(expense.id)
+                              }
+                            }
+                          },
+                          [
+                            _c("font-awesome-icon", {
+                              attrs: { icon: _vm.editIcon }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger",
+                            on: {
+                              click: function($event) {
+                                return _vm.delExpense(expense.id)
+                              }
+                            }
+                          },
+                          [
+                            _c("font-awesome-icon", {
+                              attrs: { icon: _vm.deleteIcon }
+                            })
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("img", {
+                          staticStyle: { height: "2.5rem" },
+                          attrs: {
+                            src: "/storage/" + expense.picture,
+                            alt: "Foto da despesa"
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(expense.description))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(_vm.revertDate(expense.expense_date)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v("R$ " + _vm._s(expense.amount))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(expense.user))])
+                    ])
+                  })
+                ],
+                2
               )
             ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", {}, [
-          _c("h4", [_vm._v("Lista de despesas")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.search,
-                expression: "search"
-              }
-            ],
-            staticClass: "col-md-3 col-sm-12 m-1",
-            attrs: { type: "text", placeholder: "Buscar descrição" },
-            domProps: { value: _vm.search },
-            on: {
-              keyup: [
-                function($event) {
-                  return _vm.searchExpense()
-                },
-                function($event) {
-                  if (
-                    !$event.type.indexOf("key") &&
-                    _vm._k($event.keyCode, "delete", [8, 46], $event.key, [
-                      "Backspace",
-                      "Delete",
-                      "Del"
-                    ])
-                  ) {
-                    return null
-                  }
-                  return _vm.searchExpense()
-                }
-              ],
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.search = $event.target.value
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "overflow-auto" }, [
-            _c(
-              "table",
-              { staticClass: "table table-sm table-striped" },
-              [
-                _vm._m(1),
-                _vm._v(" "),
-                _vm._l(_vm.expenses, function(expense) {
-                  return _c("tr", { key: expense.index }, [
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-info",
-                          on: {
-                            click: function($event) {
-                              return _vm.editFields(expense.id)
-                            }
-                          }
-                        },
-                        [
-                          _c("font-awesome-icon", {
-                            attrs: { icon: _vm.editIcon }
-                          })
-                        ],
-                        1
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-danger",
-                          on: {
-                            click: function($event) {
-                              return _vm.delExpense(expense.id)
-                            }
-                          }
-                        },
-                        [
-                          _c("font-awesome-icon", {
-                            attrs: { icon: _vm.deleteIcon }
-                          })
-                        ],
-                        1
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("img", {
-                        staticStyle: { height: "2.5rem" },
-                        attrs: {
-                          src: "/storage/" + expense.picture,
-                          alt: "Foto da despesa"
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(expense.description))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(_vm._s(_vm.revertDate(expense.expense_date)))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("R$ " + _vm._s(expense.amount))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(expense.user))])
-                  ])
-                })
-              ],
-              2
-            )
           ])
         ])
       ])
