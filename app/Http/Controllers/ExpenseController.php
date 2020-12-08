@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 
 class ExpenseController extends Controller
@@ -17,7 +19,6 @@ class ExpenseController extends Controller
     {
         # code...
         $this->middleware('auth');
-        
     }
     public function index()
     {
@@ -67,7 +68,7 @@ class ExpenseController extends Controller
     public function show(Expense $expense)
     {
         //
-        
+
     }
 
     /**
@@ -96,7 +97,11 @@ class ExpenseController extends Controller
         $expense->amount = $request->amount;
         $picture = $request->picture;
         // var_dump($picture);
-        if(is_object($picture)){
+        if (is_object($picture)) {
+            $oldPicture = '/' . $expense->picture;
+            if (Storage::disk('public')->exists($oldPicture)) {
+                Storage::disk('public')->delete($oldPicture);
+            }
             $expense->picture = $picture->store('despesa');
         }
         $expense->save();
@@ -112,8 +117,11 @@ class ExpenseController extends Controller
     public function destroy(Expense $expense)
     {
         //
+        $picture = '/' . $expense->picture;
+        if (Storage::disk('public')->exists($picture)) {
+            Storage::disk('public')->delete($picture);
+        }
         $expense->delete();
         return 'Deletado!';
-        
     }
 }
