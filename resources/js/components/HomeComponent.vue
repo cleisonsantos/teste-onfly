@@ -1,133 +1,139 @@
 <template>
-<div class="d-flex justify-content-center">
-  <div class="col-xl-6 col-md-12 col-sm-12">
-    <div class="card">
-      <div class="card-header"><h3>Despesas</h3></div>
+  <div class="d-flex justify-content-center">
+    <div class="col-xl-6 col-md-12 col-sm-12">
+      <div class="card">
+        <div class="card-header"><h3>Despesas</h3></div>
 
-      <div class="card-body">
-        <div class="col-md-12">
-          <h4>Cadastrar despesa</h4>
-          <form>
-            <div class="row">
-              <textarea
-                v-model="description"
-                class="form-control col-md-3 my-1"
-                cols="10"
-                rows="2"
-                placeholder="Descreva a despesa"
-              ></textarea>
-              <input
-                v-model="expenseDate"
-                type="date"
-                class="form-control col-md-3 my-1"
-                placeholder="Data"
-              />
-              <input
-                v-model.lazy="amount"
-                class="form-control col-md-3 my-1"
-                v-money="money"
-                placeholder="Valor"
-              />
-              <div class="custom-file col-md-3 my-1">
+        <div class="card-body">
+          <div class="col-md-12">
+            <h4>Cadastrar despesa</h4>
+            <form>
+              <div class="row">
+                <textarea
+                  v-model="description"
+                  class="form-control col-md-3 my-1"
+                  cols="10"
+                  rows="2"
+                  placeholder="Descreva a despesa"
+                ></textarea>
                 <input
-                  class="custom-file-input"
-                  placeholder="Adicionar imagem"
-                  type="file"
-                  id="picture"
-                  ref="picture"
-                  v-on:change="handlePicture()"
+                  v-model="expenseDate"
+                  type="date"
+                  class="form-control col-md-3 my-1"
+                  placeholder="Data"
                 />
-                <label class="custom-file-label" for="foto"
-                  >Adicionar foto</label
-                >
+                <input
+                  v-model.lazy="amount"
+                  class="form-control col-md-3 my-1"
+                  v-money="money"
+                  placeholder="Valor"
+                />
+                <div class="custom-file col-md-3 my-1">
+                  <input
+                    class="custom-file-input"
+                    placeholder="Adicionar imagem"
+                    type="file"
+                    id="picture"
+                    ref="picture"
+                    v-on:change="handlePicture()"
+                  />
+                  <label class="custom-file-label" for="foto"
+                    >Adicionar foto</label
+                  >
+                </div>
+                <!-- <input type="hidden" v-model="userId" value="@php Auth::id(); @endphp"> -->
               </div>
-              <!-- <input type="hidden" v-model="userId" value="@php Auth::id(); @endphp"> -->
-            </div>
-            <div
-              v-bind:class="alert.class"
-              class="col-md-4 my-1"
-              v-show="alert.status"
-              role="alert"
-            >
-              {{ alert.message }}
-            </div>
-            <div class="my-2">
-              <button
-                class="btn btn-success"
-                v-on:click="saveExpense"
-                v-show="add.status"
-                v-bind:disabled="!description || !expenseDate || !amount"
+              <div
+                v-bind:class="alert.class"
+                class="col-md-4 my-1"
+                v-show="alert.status"
+                role="alert"
               >
-                Adicionar
-              </button>
-              <button
-                class="btn btn-info"
-                v-on:click="editExpense"
-                v-show="edit.status"
-                v-bind:disabled="!description || !expenseDate || !amount"
-              >
-                Editar
-              </button>
-              <button
-                type="reset"
-                class="btn btn-warning"
-                v-on:click="clearFields"
-                value="Limpar"
-              >
-                Limpar
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="">
-          <h4>Lista de despesas</h4>
-          <input
-            type="text"
-            class="col-md-3 col-sm-12 m-1"
-            v-on:keyup="searchExpense()"
-            v-on:keyup.delete="searchExpense()"
-            v-model="search"
-            placeholder="Buscar descrição"
-          />
-          <div class="overflow-auto">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>EDITAR</th>
-                  <th>EXCLUIR</th>
-                  <th>Foto</th>
-                  <th>Descrição</th>
-                  <th>Data</th>
-                  <th>Valor</th>
-                  <th>Usuário</th>
-                </tr>
-              </thead>
-              <tr v-for="expense in expenses" :key="expense.index">
-                <td>
-                  <button
-                    class="btn btn-info"
-                    v-on:click="editFields(expense.id)"
-                  >
-                    <font-awesome-icon :icon="editIcon" />
-                  </button>
-                </td>
-                <td>
-                  <button
-                    class="btn btn-danger"
-                    v-on:click="delExpense(expense.id)"
-                  >
-                    <font-awesome-icon :icon="deleteIcon" />
-                  </button>
-                </td>
-                <td><img style="height: 2.5rem" v-bind:src="'/storage/' + expense.picture" alt="Foto da despesa"></td>
-                <td>{{ expense.description }}</td>
-                <td>{{ revertDate(expense.expense_date) }}</td>
-                <td>R$ {{ expense.amount }}</td>
-                <td>{{ expense.user }}</td>
-              </tr>
-            </table>
+                {{ alert.message }}
+              </div>
+              <div class="my-2">
+                <button
+                  class="btn btn-success"
+                  v-on:click="saveExpense"
+                  v-show="add.status"
+                  v-bind:disabled="!description || !expenseDate || !amount"
+                >
+                  Adicionar
+                </button>
+                <button
+                  class="btn btn-info"
+                  v-on:click="editExpense"
+                  v-show="edit.status"
+                  v-bind:disabled="!description || !expenseDate || !amount"
+                >
+                  Editar
+                </button>
+                <button
+                  type="reset"
+                  class="btn btn-warning"
+                  v-on:click="clearFields"
+                  value="Limpar"
+                >
+                  Limpar
+                </button>
+              </div>
+            </form>
           </div>
-          <!-- <div
+          <div class="">
+            <h4>Lista de despesas</h4>
+            <input
+              type="text"
+              class="col-md-3 col-sm-12 m-1"
+              v-on:keyup="searchExpense()"
+              v-on:keyup.delete="searchExpense()"
+              v-model="search"
+              placeholder="Buscar descrição"
+            />
+            <div class="overflow-auto">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>EDITAR</th>
+                    <th>EXCLUIR</th>
+                    <th>Foto</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Valor</th>
+                    <th>Usuário</th>
+                  </tr>
+                </thead>
+                <tr v-for="expense in expenses" :key="expense.index">
+                  <td>
+                    <button
+                      class="btn btn-info"
+                      v-on:click="editFields(expense.id)"
+                    >
+                      <font-awesome-icon :icon="editIcon" />
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-danger"
+                      v-on:click="delExpense(expense.id)"
+                    >
+                      <font-awesome-icon :icon="deleteIcon" />
+                    </button>
+                  </td>
+                  <td>
+                    <img
+                      style="height: 2.5rem"
+                      v-bind:src="'/storage/' + expense.picture"
+                      alt="Foto da despesa"
+                    />
+                  </td>
+                  <td>{{ expense.description }}</td>
+                  <td>{{ revertDate(expense.expense_date) }}</td>
+                  <td>R$ {{ expense.amount }}</td>
+                  <td>{{ expense.user }}</td>
+                </tr>
+              </table>
+            </div>
+            <!-- <div
                 v-bind:class="alertSearch.class"
                 class="my-1 text-center"
                 v-show="alertSearch.status"
@@ -135,10 +141,10 @@
               >
                 {{ alertSearch.message }}
               </div> -->
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -149,7 +155,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
   },
   computed: {},
   data() {
@@ -215,7 +221,7 @@ export default {
       this.description = null;
       this.expenseDate = null;
       this.amount = null;
-      this.picture = null;
+      this.picture = [];
     },
     alertSearchResult: function (m, className) {
       this.alertSearch.message = m;
@@ -248,6 +254,7 @@ export default {
 
     //FUNÇÃO PARA A IMAGEM
     handlePicture: function () {
+      this.picture = []
       let uploadedPicture = this.$refs.picture.files;
 
       this.picture.push(uploadedPicture[0]);
@@ -259,20 +266,24 @@ export default {
         .get("/despesas")
         .then((res) => {
           this.expenses = res.data;
-          this.unfilteredExpenses = res.data;
+          console.log("Carregou!");
         })
         .catch((error) => {
           console.error();
           this.errored = true;
         })
         .finally(() => (this.loading = false));
+      
     },
     saveExpense: function (e) {
       e.preventDefault();
       let formData = new FormData();
       formData.append("description", this.description);
       formData.append("expenseDate", this.expenseDate);
-      formData.append("amount", parseInt(this.amount.replace('R$ ', '')));
+      formData.append(
+        "amount",
+        parseFloat(this.amount.replace("R$ ", "").replace(",", "."))
+      );
       formData.append("picture", this.picture[0]);
       //console.log(formData)
       axios
@@ -286,13 +297,13 @@ export default {
             "Despesa adicionada com sucesso!",
             "alert alert-success"
           );
-          console.log(res.data)
+          this.loadExpenses();
         })
         .catch((error) => {
           this.alertSomething(error, "alert alert-danger");
         });
 
-      this.loadExpenses();
+      
       this.clearFields();
       setTimeout(this.alertReset, 5000);
     },
@@ -300,26 +311,35 @@ export default {
     editExpense: function (e) {
       e.preventDefault();
       let url = "/despesas/" + this.id;
-      
+      let formData = new FormData()
+      formData.append("_method", "PUT")
+      formData.append("description", this.description);
+      formData.append("expenseDate", this.expenseDate);
+      formData.append(
+        "amount",
+        parseFloat(this.amount.replace("R$ ", "").replace(",", "."))
+      );
+      formData.append("picture", this.picture[0]);
       axios
-        .put(url, {
-          description: this.description,
-          expenseDate: this.expenseDate,
-          amount: parseFloat(this.amount.replace('R$ ', '').replace(",", ".")),
-          picture: this.picture,
-        })
+        .post(url, formData,
+       {
+         headers: {
+          'Content-Type': 'multipart/form-data'
+         }
+       })
         .then((res) => {
           this.alertSomething(
             "Despesa editada com sucesso!",
             "alert alert-success"
           );
+          this.loadExpenses();
         })
         .catch((error) => {
           console.log(error);
           this.alertSomething(error, "alert alert-danger");
         });
 
-      this.loadExpenses();
+      
       this.clearFields();
       this.disableBtn();
       setTimeout(this.alertReset, 5000);

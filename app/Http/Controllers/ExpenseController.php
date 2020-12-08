@@ -94,14 +94,12 @@ class ExpenseController extends Controller
         $expense->description = $request->description;
         $expense->expense_date = $request->expenseDate;
         $expense->amount = $request->amount;
-        $file = $request->picture;
-        var_dump($file);
-        if(is_array($file)){
-            $expense->picture = $file->store('despesa');
-        }
+        $picture = $request->picture;
+        // if(is_array($picture)){
+            $expense->picture = $picture->store('despesa');
+        // }
         $expense->save();
-        return 'Despesa editada!';
-        //var_dump($request->all());
+        // var_dump($request->all());
     }
 
     /**

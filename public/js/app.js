@@ -12158,6 +12158,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -12232,7 +12238,7 @@ __webpack_require__.r(__webpack_exports__);
       this.description = null;
       this.expenseDate = null;
       this.amount = null;
-      this.picture = null;
+      this.picture = [];
     },
     alertSearchResult: function alertSearchResult(m, className) {
       this.alertSearch.message = m;
@@ -12266,6 +12272,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     //FUNÇÃO PARA A IMAGEM
     handlePicture: function handlePicture() {
+      this.picture = [];
       var uploadedPicture = this.$refs.picture.files;
       this.picture.push(uploadedPicture[0]);
     },
@@ -12275,7 +12282,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/despesas").then(function (res) {
         _this2.expenses = res.data;
-        _this2.unfilteredExpenses = res.data;
+        console.log("Carregou!");
       })["catch"](function (error) {
         console.error();
         _this2.errored = true;
@@ -12290,7 +12297,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append("description", this.description);
       formData.append("expenseDate", this.expenseDate);
-      formData.append("amount", parseInt(this.amount.replace('R$ ', '')));
+      formData.append("amount", parseFloat(this.amount.replace("R$ ", "").replace(",", ".")));
       formData.append("picture", this.picture[0]); //console.log(formData)
 
       axios.post("/despesas", formData, {
@@ -12300,11 +12307,10 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         _this3.alertSomething("Despesa adicionada com sucesso!", "alert alert-success");
 
-        console.log(res.data);
+        _this3.loadExpenses();
       })["catch"](function (error) {
         _this3.alertSomething(error, "alert alert-danger");
       });
-      this.loadExpenses();
       this.clearFields();
       setTimeout(this.alertReset, 5000);
     },
@@ -12313,19 +12319,25 @@ __webpack_require__.r(__webpack_exports__);
 
       e.preventDefault();
       var url = "/despesas/" + this.id;
-      axios.put(url, {
-        description: this.description,
-        expenseDate: this.expenseDate,
-        amount: parseFloat(this.amount.replace('R$ ', '').replace(",", ".")),
-        picture: this.picture
+      var formData = new FormData();
+      formData.append("_method", "PUT");
+      formData.append("description", this.description);
+      formData.append("expenseDate", this.expenseDate);
+      formData.append("amount", parseFloat(this.amount.replace("R$ ", "").replace(",", ".")));
+      formData.append("picture", this.picture[0]);
+      axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }).then(function (res) {
         _this4.alertSomething("Despesa editada com sucesso!", "alert alert-success");
+
+        _this4.loadExpenses();
       })["catch"](function (error) {
         console.log(error);
 
         _this4.alertSomething(error, "alert alert-danger");
       });
-      this.loadExpenses();
       this.clearFields();
       this.disableBtn();
       setTimeout(this.alertReset, 5000);
