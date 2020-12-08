@@ -95,9 +95,10 @@ class ExpenseController extends Controller
         $expense->expense_date = $request->expenseDate;
         $expense->amount = $request->amount;
         $picture = $request->picture;
-        // if(is_array($picture)){
+        // var_dump($picture);
+        if(is_object($picture)){
             $expense->picture = $picture->store('despesa');
-        // }
+        }
         $expense->save();
         // var_dump($request->all());
     }
