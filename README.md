@@ -6,7 +6,12 @@ Aplicação laravel de avaliação da empresa Onfly
 ``` 
 composer install
 ```
-- renomear o arquivo .env.example para .env e configurar o banco de dados dentro do mesmo.
+- renomear o arquivo .env.example para .env e configurar o banco de dados dentro do mesmo e também definir FILESYSTEM_DRIVER=public no final do arquivo.
+
+``` 
+php artisan storage:link
+```
+
 ``` 
 php artisan key:generate
 ```
