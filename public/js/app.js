@@ -47965,7 +47965,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "d-flex justify-content-center" }, [
-    _c("div", { staticClass: "col-xl-6 col-md-12 col-sm-12" }, [
+    _c("div", { staticClass: "col-xl-10 col-md-12 col-sm-12" }, [
       _c("div", { staticClass: "card" }, [
         _vm._m(0),
         _vm._v(" "),

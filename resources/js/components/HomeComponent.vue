@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-center">
-    <div class="col-xl-6 col-md-12 col-sm-12">
+    <div class="col-xl-10 col-md-12 col-sm-12">
       <div class="card">
         <div class="card-header"><h3>Despesas</h3></div>
 
